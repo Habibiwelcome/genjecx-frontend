@@ -24,7 +24,7 @@ export default function FoundersPage() {
                 'Building intelligence from first principles',
               ]}
               focus="What problems they work on and why"
-              imageSrc="/founders/garimaf.png"
+              imageSrc="founders/garimaf.png"
               imageAlt="Garima Kalra"
             />
             <FounderCard
@@ -38,7 +38,7 @@ export default function FoundersPage() {
                 'Long-term research-driven product engineering',
               ]}
               focus="What problems they work on and why"
-                imageSrc="/founders/aurinf.png"
+                imageSrc="founders/aurinf.png"
                 imageAlt="Aurin Desai"
             />
           </div>
