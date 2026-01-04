@@ -12,6 +12,13 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'GenJecX | Custom AI Systems & Neural Networks',
   description: 'Proprietary AI systems and custom neural models for organizations requiring intelligence beyond off-the-shelf solutions.',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({
