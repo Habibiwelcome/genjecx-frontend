@@ -540,25 +540,55 @@ export default function WhatWeBuild() {
                           </h4>
                           <div className="space-y-2">
                             {project.diagrams.map((diagram) => (
-                              <button
-                                key={diagram.id}
-                                onClick={() => setActiveDiagram(diagram.id)}
-                                className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-colors ${
-                                  activeDiagram === diagram.id
-                                    ? 'bg-[#0F172A] text-white'
-                                    : 'bg-white text-[#475569] hover:bg-[#E5E7EB]'
-                                }`}
-                              >
-                                <span className="font-medium">
-                                  ● {diagram.title}
-                                </span>
-                              </button>
+                              <div key={diagram.id}>
+                                <button
+                                  onClick={() => setActiveDiagram(activeDiagram === diagram.id ? null : diagram.id)}
+                                  className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-colors ${
+                                    activeDiagram === diagram.id
+                                      ? 'bg-[#0F172A] text-white'
+                                      : 'bg-white text-[#475569] hover:bg-[#E5E7EB]'
+                                  }`}
+                                >
+                                  <span className="font-medium">
+                                    ● {diagram.title}
+                                  </span>
+                                </button>
+                                
+                                {/* Mobile inline diagram viewer - only shows on small screens */}
+                                {activeDiagram === diagram.id && (
+                                  <div className="lg:hidden mt-3 mb-4 animate-in slide-in-from-top-2 duration-200">
+                                    <div className="bg-white rounded-lg border border-[#E5E7EB] overflow-hidden">
+                                      {/* Diagram Image */}
+                                      <div className="relative w-full h-[250px] bg-[#F3F4F6]">
+                                        <Image
+                                          src={diagram.imagePath}
+                                          alt={diagram.title}
+                                          fill
+                                          style={{ objectFit: 'contain' }}
+                                          className="p-2"
+                                          sizes="(max-width: 1024px) 100vw, 800px"
+                                        />
+                                      </div>
+                                      
+                                      {/* Description */}
+                                      <div className="p-4 border-t border-[#E5E7EB]">
+                                        <h5 className="font-semibold text-[#0F172A] mb-2 text-sm">
+                                          {diagram.title}
+                                        </h5>
+                                        <p className="text-xs text-[#475569] leading-relaxed">
+                                          {diagram.description}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
                             ))}
                           </div>
                         </div>
 
-                        {/* Center: Diagram Canvas */}
-                        <div className="lg:col-span-2">
+                        {/* Center: Diagram Canvas - Desktop only */}
+                        <div className="hidden lg:block lg:col-span-2">
                           {activeDiagram ? (
                             (() => {
                               const diagram = project.diagrams.find(
