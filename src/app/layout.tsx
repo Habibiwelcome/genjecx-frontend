@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { AnalyticsProvider } from '@/components/providers/AnalyticsProvider';
 
-export const viewport: Viewport = {
+export const viewport: Viewport = {]
   width: 'device-width',
   initialScale: 1,
 };
