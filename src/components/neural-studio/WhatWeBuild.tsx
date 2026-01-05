@@ -380,7 +380,7 @@ export default function WhatWeBuild() {
           title: 'Collection Engine',
           description:
             'Intelligent scheduling with optimal timing and audience targeting.',
-          imagePath: '/diagrams/tier-1/bas/guest-collectiion-pipeline.png',
+          imagePath: '/diagrams/tier-1/bas/guest-collection-pipeline.png',
         },
         {
           id: 'bas-4',
