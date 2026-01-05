@@ -444,7 +444,7 @@ export default function ModelTaxonomy() {
               sectionDescription: 'How problems flow through the system',
               diagrams: [
                 {
-                  id: 'bw-data',
+                  id: 'bw-data-1',
                   number: 4,
                   title: 'Inference Data Flow',
                   purpose: 'Problem to solution processing',
@@ -456,7 +456,7 @@ export default function ModelTaxonomy() {
                   imagePaths: ['/diagrams/research/tier-2/brandwriter/inference-data-flow.png'],
                 },
                 {
-                  id: 'bw-data',
+                  id: 'bw-data-2',
                   number: 5,
                   title: 'Reasoning Path',
                   purpose: 'Problem to solution processing',
@@ -1231,7 +1231,7 @@ export default function ModelTaxonomy() {
                                             src={src}
                                             alt={`${currentDiagram.title} — view ${index + 1}`}
                                             fill
-                                            className="object-contain p-2"
+                                            className={`object-contain p-2 ${src.includes('sara/inference-reasoning') ? 'rotate-90' : ''}`}
                                             priority
                                           />
                                         </div>
@@ -1310,7 +1310,7 @@ export default function ModelTaxonomy() {
                                 src={src}
                                 alt={`${currentDiagram.title} — view ${index + 1}`}
                                 fill
-                                className="object-contain p-4"
+                                className={`object-contain p-4 ${src.includes('sara/inference-reasoning') ? 'rotate-90' : ''}`}
                                 priority
                               />
                               <span className="absolute bottom-2 right-3 text-xs text-[#9CA3AF]">
