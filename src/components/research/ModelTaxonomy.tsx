@@ -426,7 +426,7 @@ export default function ModelTaxonomy() {
               sectionDescription: 'Content processing pipeline',
               diagrams: [
                 {
-                  id: 'bw-data-1',
+                  id: 'bw-context-1',
                   number: 3,
                   title: 'Brand Context Extraction',
                   purpose: 'Understanding brand guidelines',
