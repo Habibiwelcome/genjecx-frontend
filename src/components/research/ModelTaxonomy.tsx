@@ -495,7 +495,7 @@ export default function ModelTaxonomy() {
                     'Format conversion for different channels',
                     'Emoji and special character handling rules',
                   ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/input-normalization.png'],
+                  imagePaths: ['/diagrams/research/tier-2/brandwriter/inference-data-flow.png'],
                 },
               ],
             },
@@ -513,7 +513,7 @@ export default function ModelTaxonomy() {
                     'Automatic regeneration with adjusted parameters',
                     'Escalation to human review queue',
                   ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/failure&optimization.png'],
+                  imagePaths: ['/diagrams/research/tier-2/brandwriter/failure-handling.png'],
                 },
                                 {
                   id: 'bw-scale-4',
@@ -767,7 +767,7 @@ export default function ModelTaxonomy() {
                     'User signal weighting and normalization',
                     'Feature extraction from podcast metadata',
                   ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/input-normalization.png'],
+                  imagePaths: ['/diagrams/research/tier-2/recommender/input-normalization-flow.png'],
                 },
                 {
                   id: 'recommender-data-2',
