@@ -3,1054 +3,413 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-interface DiagramSection {
-  sectionTitle: string;
-  sectionDescription: string;
-  diagrams: {
-    id: string;
-    number: number;
-    title: string;
-    purpose: string;
-    keyPoints: string[];
-    imagePaths: string[]; // ✅ CHANGED from imagePath
-  }[];
+interface DiagramStep {
+  id: string;
+  title: string;
+  description: string;
+  imagePath: string;
 }
 
 interface Project {
-  id: string;
+  id: number;
   name: string;
   shortName: string;
-  intelligence: string;
-  tier: 'Tier-1' | 'Tier-2' | 'Tier-3' | 'Non-LLM';
+  tier: 'Tier-1' | 'Tier-2' | 'Tier-3';
   description: string;
-  diagramSections: DiagramSection[];
+  status: string;
+  diagrams: DiagramStep[];
 }
 
-interface TierConfig {
-  id: string;
-  name: string;
-  philosophy: string;
-  projects: Project[];
-}
-
-export default function ModelTaxonomy() {
+export default function WhatWeBuild() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [expandedProject, setExpandedProject] = useState<number | null>(null);
   const [activeDiagram, setActiveDiagram] = useState<string | null>(null);
-  const [isZoomed, setIsZoomed] = useState(false);
 
-  // 8 Portfolio Projects organized by Tier
-  const tiers: TierConfig[] = [
-    {
-      id: 'tier-3',
-      name: 'Tier 3: Custom-Trained Models',
-      philosophy:
-        'Built entirely from scratch on domain-specific data. Use when the problem is novel or existing models are fundamentally misaligned.',
-      projects: 
-      [
-        {
-          id: 'Nova',
-          name: 'Generic Intelligence Model',
-          shortName: 'NOVA',
-          intelligence: 'RNN-CNN hybrid for generic answers, deterministic programming reasoning',
-          tier: 'Tier-3',
-          description: 'Custom neural network trained on generic & programming datasets',
-          diagramSections: [
-            {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Complete system architecture from input to output',
-              diagrams: [
-                {
-                  id: 'nova-sys-1',
-                  number: 1,
-                  title: 'High-Level System Map',
-                  purpose: 'Shows complete system flow and component relationships',
-                  keyPoints: [
-                    'Dual-path architecture separating generic vs code queries',
-                    'Unified embedding layer before model split',
-                    'Response aggregation with confidence scoring',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/system-overview-n.png'],
-                },
-                {
-                  id: 'nova-sys-2',
-                  number: 2,
-                  title: 'Intelligence Placement',
-                  purpose: 'Where learning resides in the architecture',
-                  keyPoints: [
-                    'RNN handles sequential token dependencies',
-                    'CNN extracts local syntactic patterns',
-                    'Fusion layer combines temporal and spatial features',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/RNN-CNN.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Intelligence Placement',
-              sectionDescription: 'Where custom training and learning occurs',
-              diagrams: [
-                {
-                  id: 'nova-intel-1',
-                  number: 3,
-                  title: 'RNN-CNN Architecture',
-                  purpose: 'Hybrid neural structure for reasoning',
-                  keyPoints: [
-                    'Bidirectional LSTM for context understanding',
-                    '1D convolutions with varying kernel sizes',
-                    'Attention mechanism over CNN feature maps',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/training-pipeline.png'],
-                },
-                {
-                  id: 'nova-intel-2',
-                  number: 4,
-                  title: 'Training Pipeline',
-                  purpose: 'How deterministic reasoning is encoded',
-                  keyPoints: [
-                    'Cross-entropy loss for classification tasks',
-                    'Teacher forcing during sequence generation',
-                    'Gradient clipping to prevent explosion',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/image-generation-pipeline.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Data & Signal Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
-                {
-                  id: 'nova-data-1',
-                  number: 5,
-                  title: 'Input Normalization',
-                  purpose: 'Standardizing problem representation',
-                  keyPoints: [
-                    'Tokenization with custom vocabulary',
-                    'Padding and truncation to fixed length',
-                    'Special tokens for code vs natural language',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/inference-pipeline.png'],
-                },
-                {
-                  id: 'nova-data-2',
-                  number: 6,
-                  title: 'Memory & Context',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'Hidden state carries conversation context',
-                    'Attention weights highlight relevant tokens',
-                    'Output projection to vocabulary space',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/context-reasoning.png'],
-                },
-                {
-                  id: 'nova-data-3',
-                  number: 7,
-                  title: 'Failure Handling',
-                  purpose: 'Maintaining reasoning state',
-                  keyPoints: [
-                    'Confidence threshold triggers fallback',
-                    'Graceful degradation to simpler responses',
-                    'Error logging for model retraining',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/failure-handling.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Latency & Optimization',
-              sectionDescription: 'How reasoning produces solutions',
-              diagrams: [
-                {
-                  id: 'nova-model-1',
-                  number: 8,
-                  title: 'Reasoning Path',
-                  purpose: 'Step-by-step solution generation',
-                  keyPoints: [
-                    'Batch inference for throughput optimization',
-                    'Model quantization for faster inference',
-                    'Response caching for repeated queries',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/nova/latency&optimization.png'],
-                },
-              ],
-            },
-            
-          ],
-          
-        },
-        
-////////////////////////////////////////////
-        // Additional Tier-1 projects would follow same structure
-        ///////////////////////////////////////////////////
-
-
-
-////////////////ALEX MODEL ////////////////////
-        {
-          id: 'Alexa',
-          name: 'Generic Intelligence Model',
-          shortName: 'ALEXA',
-          intelligence: 'RNN-CNN hybrid for saasier personality modeling',
-          tier: 'Tier-3',
-          description: 'Custom neural network trained on personality datasets',
-          diagramSections: [
-            {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Complete system architecture from input to output',
-              diagrams: [
-                {
-                  id: 'Alexa-sys-1',
-                  number: 1,
-                  title: 'System-Overview',
-                  purpose: 'Shows complete system flow and component relationships',
-                  keyPoints: [
-                    'Personality embedding layer at input stage',
-                    'Emotion classification branch for tone control',
-                    'Response generation with persona constraints',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/alexa/system-overview.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Intelligence Placement',
-              sectionDescription: 'Where custom training and learning occurs',
-              diagrams: [
-                {
-                  id: 'Alexa-intel-1',
-                  number: 3,
-                  title: 'RNN-CNN Architecture',
-                  purpose: 'Hybrid neural structure for reasoning',
-                  keyPoints: [
-                    'GRU cells for efficient sequential modeling',
-                    'Dilated convolutions for wider receptive field',
-                    'Skip connections to preserve personality signals',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/alexa/RNN-CNN.png'],
-                },
-                {
-                  id: 'Alexa-intel-2',
-                  number: 4,
-                  title: 'Training Pipeline',
-                  purpose: 'How deterministic reasoning is encoded',
-                  keyPoints: [
-                    'Personality-conditioned loss weighting',
-                    'Contrastive learning for tone differentiation',
-                    'Curriculum learning from simple to complex dialogues',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/alexa/training-pipeline.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Failure & Optimization',
-              sectionDescription: 'Production deployment considerations',
-              diagrams: [
-                {
-                  id: 'Alexa-scale-1',
-                  number: 10,
-                  title: 'Failure Handling',
-                  purpose: 'Graceful degradation under error conditions',
-                  keyPoints: [
-                    'Out-of-character detection and recovery',
-                    'Fallback to safe personality defaults',
-                    'Conversation reset triggers and thresholds',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/alexa/failure&optimization.png'],
-                },
-              ],
-            },
-            
-          ],
-          
-        },
-        ///////////////// SARA MODEL ////////////////////
-        {
-          id: 'Sara',
-          name: 'Personality Model Sara',
-          shortName: 'Sara',
-          intelligence: 'Personality-Conditioned Conversational Intelligence',
-          tier: 'Tier-3',
-          description: 'A custom-trained neural network that encodes personality, tone, and behavioral boundaries to generate consistent, emotionally coherent conversational responses.',
-          diagramSections: [
-            {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Complete system architecture from input to output',
-              diagrams: [
-                {
-                  id: 'sara-sys-1',
-                  number: 1,
-                  title: 'High-Level System Map',
-                  purpose: 'Shows complete system flow and component relationships',
-                  keyPoints: [
-                    'Emotional state tracker at conversation entry',
-                    'Personality boundary enforcement layer',
-                    'Multi-turn context aggregation module',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/sara/system-overview.png'],
-                  
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Intelligence Components',
-              sectionDescription: 'Where custom training and learning occurs',
-              diagrams: [
-                {
-                  id: 'sara-intel-1',
-                  number: 3,
-                  title: 'RNN-CNN Architecture',
-                  purpose: 'Hybrid neural structure for reasoning',
-                  keyPoints: [
-                    'LSTM with peephole connections for memory',
-                    'Multi-scale CNNs for phrase-level patterns',
-                    'Gated fusion for combining modalities',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/sara/RNN-CNN.png'],
-                },
-                {
-                  id: 'sara-intel-2',
-                  number: 4,
-                  title: 'Training Pipeline',
-                  purpose: 'How deterministic reasoning is encoded',
-                  keyPoints: [
-                    'Triplet loss for emotional consistency',
-                    'Behavioral clipping to enforce boundaries',
-                    'Data augmentation with paraphrased dialogues',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/sara/training-pipeline.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Inference & Reasoning Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
-                {
-                  id: 'sara-data',
-                  number: 6,
-                  title: 'Inference Data Flow',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'User input with conversation history encoding',
-                    'Personality vector injection before decoding',
-                    'Response filtering for boundary compliance',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/sara/inference-reasoning.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Scale & Reliability',
-              sectionDescription: 'Production deployment considerations',
-              diagrams: [
-                {
-                  id: 'sara-scale-1',
-                  number: 10,
-                  title: 'Failure & Optimization',
-                  purpose: 'Graceful degradation under error conditions',
-                  keyPoints: [
-                    'Error detection',
-                    'Fallback mechanisms',
-                    'Recovery strategies',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-3/sara/failure&optimization.png'],
-                },
-              ],
-            },
-            
-          ],
-          
-        },
-      ],
-    },
-  ////////////
-  ////////////////
-  //////////////////////
-  /////////TIER2//////////////
-  /////////////////////////////////
-    {
-      id: 'tier-2',
-      name: 'Tier 2: Adapted Models',
-      philosophy:
-        'Pre-trained models fine-tuned for specific problems. Use when a foundation model exists but needs domain specialization.',
-      projects: [
-        {
-          id: 'brandwriter',
-          name: 'BrandWriter',
-          shortName: 'BrandWriter',
-          intelligence: 'Fine-tuned models with custom content pipeline',
-          tier: 'Tier-2',
-          description: 'Hybrid system combining transfer learning with custom orchestration',
-          diagramSections: [
-            {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Brand content generation architecture',
-              diagrams: [
-                {
-                  id: 'bw-sys-1',
-                  number: 1,
-                  title: 'Platform Architecture',
-                  purpose: 'Multi-layer content generation system',
-                  keyPoints: [
-                    'Brand context ingestion and parsing pipeline',
-                    'Multi-model orchestration for different content types',
-                    'Quality scoring before output delivery',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/system-architecture.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Intelligence Placement',
-              sectionDescription: 'Where adaptation happens',
-              diagrams: [
-                {
-                  id: 'bw-intel-1',
-                  number: 2,
-                  title: 'Model Adaptation',
-                  purpose: 'Fine-tuning strategy for brand voice',
-                  keyPoints: [
-                    'LoRA adapters for efficient fine-tuning',
-                    'Brand voice calibration with sample content',
-                    'A/B testing framework for model selection',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/training-pipeline.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Data & Signal Flow',
-              sectionDescription: 'Content processing pipeline',
-              diagrams: [
-                {
-                  id: 'bw-data-1',
-                  number: 3,
-                  title: 'Brand Context Extraction',
-                  purpose: 'Understanding brand guidelines',
-                  keyPoints: [
-                    'Style guide parsing and embedding',
-                    'Tone vocabulary extraction from samples',
-                    'Forbidden phrase and pattern encoding',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/memory&context.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Inference & Reasoning Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
-                {
-                  id: 'bw-data',
-                  number: 4,
-                  title: 'Inference Data Flow',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'Content request parsing and intent classification',
-                    'Brand context injection into prompt template',
-                    'Multi-stage generation with refinement loops',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/inference-data-flow.png'],
-                },
-                {
-                  id: 'bw-data',
-                  number: 5,
-                  title: 'Reasoning Path',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'Chain-of-thought prompting for complex content',
-                    'Iterative refinement with brand compliance checks',
-                    'Human feedback integration for quality control',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/reasoning-path.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Scale & Reliability',
-              sectionDescription: 'Production deployment considerations',
-              diagrams: [
-                {
-                  id: 'bw-scale-1',
-                  number: 6,
-                  title: 'Ranking',
-                  purpose: 'Graceful degradation under error conditions',
-                  keyPoints: [
-                    'Multi-candidate generation with diversity sampling',
-                    'Brand alignment scoring for each candidate',
-                    'Top-k selection with human override option',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/ranking&selection.png'],
-                },
-                {
-                  id: 'bw-scale-2',
-                  number: 7,
-                  title: 'Normalization',
-                  purpose: 'Graceful degradation under error conditions',
-                  keyPoints: [
-                    'Input length standardization across platforms',
-                    'Format conversion for different channels',
-                    'Emoji and special character handling rules',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/inference-data-flow.png'],
-                },
-              ],
-            },
-             {
-              sectionTitle: 'Failure & Optimization',
-              sectionDescription: 'Production deployment considerations',
-              diagrams: [
-                              {
-                  id: 'bw-scale-3',
-                  number: 8,
-                  title: 'Failure & Optimization',
-                  purpose: 'Graceful degradation under error conditions',
-                  keyPoints: [
-                    'Off-brand content detection and rejection',
-                    'Automatic regeneration with adjusted parameters',
-                    'Escalation to human review queue',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/failure-handling.png'],
-                },
-                                {
-                  id: 'bw-scale-4',
-                  number: 9,
-                  title: 'Latency & Optimization',
-                  purpose: 'Graceful degradation under error conditions',
-                  keyPoints: [
-                    'Parallel generation for batch requests',
-                    'Caching frequent brand context embeddings',
-                    'Streaming output for real-time preview',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/latency&optimization.png'],
-                },
-              ],
-            }
-
-
-
-          ],
-        },
-
-
-        ////////////////////////VSAI//////////////////
-
-        {
-          id: 'Vsai',
-          name: 'Programming AI Model',
-          shortName: 'VSAI',
-          intelligence: 'RNN-CNN hybrid for generic answers, deterministic programming reasoning',
-          tier: 'Tier-2',
-          description: 'Custom neural network trained on generic & programming datasets',
-          diagramSections: [
-            {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Complete system architecture from input to output',
-              diagrams: [
-                {
-                  id: 'vsai-sys-1',
-                  number: 1,
-                  title: 'High-Level System Map',
-                  purpose: 'Shows complete system flow and component relationships',
-                  keyPoints: [
-                    'Natural language to code translation pipeline',
-                    'Multi-language syntax validation layer',
-                    'IDE integration via LSP protocol',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/system-architecture.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Intelligence Placement',
-              sectionDescription: 'Where custom training and learning occurs',
-              diagrams: [
-                                {
-                  id: 'vsai-sys-2',
-                  number: 2,
-                  title: 'Intelligence Placement',
-                  purpose: 'Where learning resides in the architecture',
-                  keyPoints: [
-                    'Code understanding encoder module',
-                    'Syntax-aware attention mechanisms',
-                    'Language-specific output decoder heads',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/model-architecture.png'],
-                },
-                {
-                  id: 'vsai-intel-1',
-                  number: 3,
-                  title: 'RNN-CNN Architecture',
-                  purpose: 'Hybrid neural structure for reasoning',
-                  keyPoints: [
-                    'LSTM captures code structure dependencies',
-                    'CNNs detect local syntax patterns and idioms',
-                    'Hybrid fusion for semantic understanding',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/training-pipeline.png'],
-                },
-                {
-                  id: 'vsai-intel-2',
-                  number: 3,
-                  title: 'RNN-CNN Architecture',
-                  purpose: 'Hybrid neural structure for reasoning',
-                  keyPoints: [
-                    'Token-level data flow through encoder',
-                    'AST-aware positional encodings',
-                    'Gradient checkpointing for long sequences',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/data-flow.png'],
-                },
-                {
-                  id: 'vsai-intel-3',
-                  number: 4,
-                  title: 'Training Pipeline',
-                  purpose: 'How deterministic reasoning is encoded',
-                  keyPoints: [
-                    'Conversation history window management',
-                    'Variable scope tracking across turns',
-                    'Code context accumulation strategy',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/memory&context.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Data & Signal Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
-                {
-                  id: 'vsai-data-1',
-                  number: 5,
-                  title: 'Input Normalization',
-                  purpose: 'Standardizing problem representation',
-                  keyPoints: [
-                    'Code snippet extraction from user prompts',
-                    'Language detection and syntax tagging',
-                    'Whitespace and indentation normalization',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/input-normalization.png'],
-                },
-                {
-                  id: 'vsai-data-2',
-                  number: 6,
-                  title: 'Memory & Context',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'Step-by-step code generation reasoning',
-                    'Intermediate variable and type tracking',
-                    'Output validation before response',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/reasoning-path.png'],
-                },
-                {
-                  id: 'vsai-data-3',
-                  number: 7,
-                  title: 'Failure Handling',
-                  purpose: 'Maintaining reasoning state',
-                  keyPoints: [
-                    'Syntax error recovery strategies',
-                    'Partial code completion fallbacks',
-                    'Confidence threshold gating',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/failure-handling.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Latency & Optimization',
-              sectionDescription: 'How reasoning produces solutions',
-              diagrams: [
-                {
-                  id: 'vsai-model-1',
-                  number: 8,
-                  title: 'Reasoning Path',
-                  purpose: 'Step-by-step solution generation',
-                  keyPoints: [
-                    'Token streaming for real-time display',
-                    'KV-cache optimization for long contexts',
-                    'Request batching for concurrent users',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/vsai/latency&optimization.png'],
-                },
-              ],
-            },
-            
-          ],
-          
-        },
-
-        /////////////////////////////// Recommender System ////////////////////////
-
-                {
-          id: 'TopicRecommender',
-          name: 'Podcast Topic Recommender',
-          shortName: 'Recommender',
-          intelligence: 'RNN-CNN hybrid for generic answers, deterministic programming reasoning',
-          tier: 'Tier-2',
-          description: 'Custom neural network trained on generic & programming datasets',
-          diagramSections: [
-            {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Complete system architecture from input to output',
-              diagrams: [
-                {
-                  id: 'recommender-sys-1',
-                  number: 1,
-                  title: 'High-Level System Map',
-                  purpose: 'Shows complete system flow and component relationships',
-                  keyPoints: [
-                    'User preference ingestion and profiling',
-                    'Content-based and collaborative filtering fusion',
-                    'Ranked topic suggestions with explanations',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/system-overview.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Intelligence Placement',
-              sectionDescription: 'Where custom training and learning occurs',
-              diagrams: [
-                                {
-                  id: 'recommender-sys-2',
-                  number: 2,
-                  title: 'Intelligence Placement',
-                  purpose: 'Where learning resides in the architecture',
-                  keyPoints: [
-                    'Topic embedding model for semantic similarity',
-                    'User behavior sequence modeling',
-                    'Cold-start handling with content features',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/model-architecture.png'],
-                },
-                {
-                  id: 'recommender-intel-1',
-                  number: 3,
-                  title: 'RNN-CNN Architecture',
-                  purpose: 'Hybrid neural structure for reasoning',
-                  keyPoints: [
-                    'RNN captures listening history patterns',
-                    'CNN extracts topic features from metadata',
-                    'Attention over historical preferences',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/training-pipeline.png'],
-                },
-                {
-                  id: 'recommender-intel-2',
-                  number: 4,
-                  title: 'RNN-CNN Architecture',
-                  purpose: 'Hybrid neural structure for reasoning',
-                  keyPoints: [
-                    'User preference embedding storage',
-                    'Session-based context window',
-                    'Preference decay for stale interests',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/memory&context.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Data & Signal Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
-                {
-                  id: 'recommender-data-1',
-                  number: 5,
-                  title: 'Input Normalization',
-                  purpose: 'Standardizing problem representation',
-                  keyPoints: [
-                    'Topic text cleaning and tokenization',
-                    'User signal weighting and normalization',
-                    'Feature extraction from podcast metadata',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/input-normalization-flow.png'],
-                },
-                {
-                  id: 'recommender-data-2',
-                  number: 6,
-                  title: 'Memory & Context',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'Multi-hop reasoning through topic graph',
-                    'Score aggregation across candidates',
-                    'Diversity injection for variety',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/reasoning-path.png'],
-                },
-                {
-                  id: 'recommender-data-3',
-                  number: 7,
-                  title: 'Failure Handling',
-                  purpose: 'Maintaining reasoning state',
-                  keyPoints: [
-                    'Fallback to popularity-based ranking',
-                    'Degraded mode with cached suggestions',
-                    'Error logging for model improvement',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/failure-handling.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Latency & Optimization',
-              sectionDescription: 'How reasoning produces solutions',
-              diagrams: [
-                {
-                  id: 'recommender-model-1',
-                  number: 8,
-                  title: 'Reasoning Path',
-                  purpose: 'Step-by-step solution generation',
-                  keyPoints: [
-                    'Approximate nearest neighbor for speed',
-                    'Embedding cache for frequent queries',
-                    'Batch vs real-time inference trade-offs',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/latency-optimization.png'],
-                },
-
-              ],
-            },
-            {sectionTitle: 'Inference & Reasoning Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
-                {
-                  id: 'recommender-data',
-                  number: 9,
-                  title: 'Inference Data Flow',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'Query embedding generation from user input',
-                    'Candidate retrieval from topic index',
-                    'Re-ranking with user context features',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/brandwriter/inference-data-flow.png'],
-                },
-              
-              ],
-            },
-            {
-              sectionTitle: 'Failure Handling',
-              sectionDescription: 'Production deployment considerations',
-              diagrams: [
-                {
-                  id: 'recommender-scale-1',
-                  number: 10,
-                  title: 'Failure & Optimization',
-                  purpose: 'Graceful degradation under error conditions',
-                  keyPoints: [
-                    'Circuit breaker for model timeouts',
-                    'A/B testing framework for updates',
-                    'Continuous feedback loop integration',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-2/recommender/failure-handling.png'],
-                },
-              ],
-            },
-            
-          ],
-          
-        },
-      ],
-    },
-    //////////////////////////////////////////////////
-//////////////////////////////////
-////////////////////////////////
-/////////////////////TIER 1//////////////////////
+  // Tier classification
+  const tierCategories = [
     {
       id: 'tier-1',
-      name: 'Tier 1: LLM-Assisted Systems',
-      philosophy:
-        'Systems where LLMs provide specific capabilities within broader architectures. Use when language understanding is one component of a larger solution.',
-      projects: [
-        {
-          id: 'hookbank',
-          name: 'HookExplorer Cross-Platform',
-          shortName: 'HookExplorer',
-          intelligence: 'LLM-powered hook generation from real conversations',
-          tier: 'Tier-1',
-          description: 'Applies LLMs within carefully orchestrated content pipeline',
-          diagramSections: [
-            {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Hook generation system architecture',
-              diagrams: [
-                {
-                  id: 'he-sys-1',
-                  number: 1,
-                  title: 'System Pipeline',
-                  purpose: 'End-to-end hook discovery and generation',
-                  keyPoints: [
-                    'Multi-platform content ingestion (TikTok, Twitter, Reddit)',
-                    'Hook pattern extraction and classification',
-                    'Platform-specific output formatting',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/system-architecture.png'],
-                },
-                {
-                  id: 'he-sys-2',
-                  number: 2,
-                  title: 'System Pipeline',
-                  purpose: 'End-to-end hook discovery and generation',
-                  keyPoints: [
-                    'LLM selection per task complexity',
-                    'Prompt chaining for multi-step generation',
-                    'Quality scoring integration points',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/model-architecture.png'],
-                },
-              ],
-            },
-             {
-              sectionTitle: 'System Overview',
-              sectionDescription: 'Hook generation system architecture',
-              diagrams: [
-                {
-                  id: 'he-sys-3',
-                  number: 3,
-                  title: 'Intelligence Placement',
-                  purpose: 'End-to-end hook discovery and generation',
-                  keyPoints: [
-                    'Fine-tuned classifier for hook detection',
-                    'Prompt templates for generation tasks',
-                    'Feedback loop from user selections',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/training-pipeline.png'],
-                },
-                                {
-                  id: 'he-sys-4',
-                  number: 4,
-                  title: 'Intelligence Placement',
-                  purpose: 'End-to-end hook discovery and generation',
-                  keyPoints: [
-                    'Session history for personalization',
-                    'Niche and category context injection',
-                    'Trend data window management',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/memory&context.png'],
-                },
-              ],
-            },
-{
-              sectionTitle: 'Data & Signal Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
-                {
-                  id: 'he-data-1',
-                  number: 5,
-                  title: 'Input Normalization',
-                  purpose: 'Standardizing problem representation',
-                  keyPoints: [
-                    'Raw content cleaning and deduplication',
-                    'Engagement metric normalization',
-                    'Platform-specific metadata parsing',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/input-normalization.png'],
-                },
-              ],
-            },
-            {
-              sectionTitle: 'Latency & Optimization',
-              sectionDescription: 'How reasoning produces solutions',
-              diagrams: [
-                {
-                  id: 'he-model-1',
-                  number: 6,
-                  title: 'Reasoning Path',
-                  purpose: 'Step-by-step solution generation',
-                  keyPoints: [
-                    'Async processing for bulk generation',
-                    'Response caching for common patterns',
-                    'Rate limiting across LLM providers',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/latency&optimization.png'],
-                },
+      label: 'Applied Intelligence Systems',
+      subtitle: 'Production-Deployed Systems',
+      description:
+        'Systems built using adapted models, orchestration layers, and applied intelligence patterns to solve real-world business problems.',
+      color: 'bg-blue-100 border-blue-300',
+      badge: 'text-blue-700 bg-blue-50',
+    },
+    {
+      id: 'tier-2',
+      label: 'Hybrid Research Systems',
+      subtitle: 'Active Development',
+      description:
+        'Systems combining research-driven design with adapted models, custom pipelines, and experimental intelligence layers.',
+      color: 'bg-amber-100 border-amber-300',
+      badge: 'text-amber-700 bg-amber-50',
+    },
+    {
+      id: 'tier-3',
+      label: 'Foundational Intelligence Architectures',
+      subtitle: 'Research & Production',
+      description:
+        'Purpose-built neural systems where intelligence is trained or designed from first principles, without dependence on general-purpose LLMs.',
+      color: 'bg-red-100 border-red-300',
+      badge: 'text-red-700 bg-red-50',
+    },
+  ];
 
-              ],
-            },
-            {sectionTitle: 'Inference & Reasoning Flow',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
+  // 8 Portfolio Projects with Diagram Structure
+  const allProjects: Project[] = [
+    {
+      id: 1,
+      name: 'Nova',
+      shortName: 'Nova',
+      tier: 'Tier-3',
+      description:
+        'Custom RNN-CNN hybrid neural network for deterministic mathematical reasoning and programming support.',
+      status: 'Production',
+      diagrams: [
+        {
+          id: 'nova-1',
+          title: 'System Overview',
+          description:
+            'Black-box view showing how mathematical problems are converted into structured reasoning paths.',
+          imagePath: '/diagrams/tier-3/nova/System-overview.png',
+        },
+        {
+          id: 'nova-2',
+          title: 'Intelligence Placement',
+          description:
+            'Custom RNN-CNN hybrid where logical reasoning is encoded directly in learned weights.',
+          imagePath: '/diagrams/tier-3/nova/Intelligence-placement.png',
+        },
+        {
+          id: 'nova-3',
+          title: 'Data Flow',
+          description:
+            'Input tokenization through deterministic inference with bounded output space.',
+          imagePath: '/diagrams/tier-3/nova/data-flow.png',
+        },
+        {
+          id: 'nova-4',
+          title: 'Reasoning Path',
+          description:
+            'How the model decomposes problems and generates step-by-step solutions.',
+          imagePath: '/diagrams/tier-3/nova/reasoning-path.png',
+        },
+        {
+          id: 'nova-5',
+          title: 'Training Pipeline',
+          description:
+            'Custom loss functions and gradient control for precise reasoning behavior.',
+          imagePath: '/diagrams/tier-3/nova/training-pipeline.png',
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: 'Sara Personality Neural Model',
+      shortName: 'Sara',
+      tier: 'Tier-3',
+      description:
+        'High-EQ personality-specific neural network with sarcastic, flirtatious, and emotionally intelligent behavior.',
+      status: 'Deployed',
+      diagrams: [
+        {
+          id: 'sara-1',
+          title: 'Personality Architecture',
+          description:
+            'Standalone neural network with personality constraints embedded at training time.',
+          imagePath: '/diagrams/tier-3/sara/personality-architecture.png',
+        },
+        {
+          id: 'sara-2',
+          title: 'Trait Encoding',
+          description:
+            'How sarcasm, flirtation, and emotional intelligence are structurally embedded in weights.',
+          imagePath: '/diagrams/tier-3/sara/trait-encoding.png',
+        },
+        {
+          id: 'sara-3',
+          title: 'Memory System',
+          description:
+            'Per-user isolated memory tracking relationship progression and emotional state.',
+          imagePath: '/diagrams/tier-3/sara/memory-system.png',
+        },
+        {
+          id: 'sara-4',
+          title: 'Response Generation',
+          description:
+            'How personality constraints guide response synthesis and behavior boundaries.',
+          imagePath: '/diagrams/tier-3/sara/response-generation.png',
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: 'Alexa Personality Neural Model',
+      shortName: 'Alexa',
+      tier: 'Tier-3',
+      description:
+        'Empathetic, trust-based personality neural model with emotional consistency and boundary respect.',
+      status: 'Deployed',
+      diagrams: [
+        {
+          id: 'alexa-1',
+          title: 'Empathy Framework',
+          description:
+            'Neural architecture optimized for emotional understanding and supportive responses.',
+          imagePath: '/diagrams/tier-3/alexa/Empathy-Framework.png',
+        },
+        {
+          id: 'alexa-2',
+          title: 'Emotional State',
+          description:
+            'How emotional consistency is maintained across conversations and interactions.',
+          imagePath: '/diagrams/tier-3/alexa/Emotional-State.png',
+        },
+        {
+          id: 'alexa-3',
+          title: 'Boundary Enforcement',
+          description:
+            'Structural constraints preventing emotional over-extension or policy violations.',
+          imagePath: '/diagrams/tier-3/alexa/Boundary-enforcement.png',
+        },
+        {
+          id: 'alexa-4',
+          title: 'Response Routing',
+          description:
+            'How user input is routed through empathy and trust layers before generation.',
+          imagePath: '/diagrams/tier-3/alexa/Response-Routing.png',
+        },
+      ],
+    },
+    {
+      id: 4,
+      name: 'BrandWriter Platform',
+      shortName: 'BrandWriter',
+      tier: 'Tier-2',
+      description:
+        'Hybrid system combining fine-tuned models with custom content intelligence pipelines.',
+      status: 'Active Research',
+      diagrams: [
+        {
+          id: 'bw-1',
+          title: 'Platform Overview',
+          description:
+            'Multi-layer system integrating brand understanding with content generation.',
+          imagePath: '/diagrams/tier-2/brandwriter/platform-overview.png',
+        },
+        {
+          id: 'bw-2',
+          title: 'Brand Context Layer',
+          description:
+            'Custom pipeline for encoding brand voice, values, and messaging patterns.',
+          imagePath: '/diagrams/tier-2/brandwriter/brand-context-1.png',
+        },
                 {
-                  id: 'recommender-data',
-                  number: 7,
-                  title: 'Inference Data Flow',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'User query to hook candidate generation',
-                    'Contextual filtering based on niche',
-                    'Output ranking by predicted engagement',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/inference-data-flow.png'],
-                },
-                 {
-                  id: 'he-data-2',
-                  number: 8,
-                  title: 'Memory & Context',
-                  purpose: 'Problem to solution processing',
-                  keyPoints: [
-                    'Multi-step reasoning for hook synthesis',
-                    'Pattern matching against top performers',
-                    'Iterative refinement with constraints',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/reasoning-path.png'],
-                },
-              
-              ],
-            },
-            {
-              sectionTitle: 'Failure Handling',
-              sectionDescription: 'How problems flow through the system',
-              diagrams: [
+          id: 'bw-3',
+          title: 'Brand Context Layer',
+          description:
+            'Custom pipeline for encoding brand voice, values, and messaging patterns.',
+          imagePath: '/diagrams/tier-2/brandwriter/brand-context-2.png',
+        },
+        {
+          id: 'bw-4',
+          title: 'Content Generation',
+          description:
+            'Fine-tuned models with custom orchestration for platform-specific outputs.',
+          imagePath: '/diagrams/tier-2/brandwriter/content-generration.png',
+        },
+        {
+          id: 'bw-5',
+          title: 'Quality Control',
+          description:
+            'Validation layers ensuring consistency with brand guidelines and constraints.',
+          imagePath: '/diagrams/tier-2/brandwriter/quality-control.png',
+        },
+      ],
+    },
+    {
+      id: 5,
+      name: 'Vsai',
+      shortName: 'Code Editor',
+      tier: 'Tier-2',
+      description:
+      'An intelligent development environment that understands code context, developer intent, and project structure to generate, refactor, and reason about code in real time.',
+      status: 'Active Research',
+      diagrams: [
+        {
+          id: 'code-editor-1',
+          title: 'AI Code Editor',
+          description:
+            'A context-aware code editor that assists developers with intelligent generation, refactoring, debugging, and architectural reasoning across the entire codebase.',
+          imagePath: '/diagrams/tier-2/code-editor/analysis-pipeline.png',
+        },
+        {
+          id: 'code-editor-2',
+          title: 'Data Ingestion',
+          description:
+            'Multiple data source integration with real-time processing pipelines.',
+          imagePath: '/diagrams/tier-2/code-editor/Data-Pipeline.png',
+        },
+        {
+          id: 'code-editor-3',
+          title: 'Ranking & Selection',
+          description:
+            'Custom models for evaluating hook performance across platforms.',
+          imagePath: '/diagrams/tier-2/code-editor/optimization-engine.png',
+        },
+        {
+          id: 'code-editor-4',
+          title: 'Feedback Loop',
+          description:
+            'Learning system that improves hook generation based on performance data.',
+          imagePath: '/diagrams/tier-2/code-editor/System-Overview.png',
+        },
+        {
+          id: 'code-editor-5',
+          title: 'Feedback Loop',
+          description:
+            'Learning system that improves hook generation based on performance data.',
+          imagePath: '/diagrams/tier-2/code-editor/editor-pipeline.png',
+        },
+      ],
+    },
+    {
+      id: 6,
+      name: 'Podcast Topic Recommender',
+      shortName: 'Topic Recommender',
+      tier: 'Tier-2',
+      description:
+        'A calm, brand-aware content brain that helps a Gen Z mental health podcast gently discover, refine, and speak ideas that feel like home.',
+      status: 'Production',
+      diagrams: [
+        {
+          id: 'topic-recommender-1',
+          title: 'System Architecture',
+          description:
+            'A pastel-soft recommender that generates thoughtful mental health topics and lovingly polishes your drafts into scripts, guided by psychology, relatability, and emotional safety.',
+          imagePath: '/diagrams/tier-2/topic-recommender/system-overview.png',
+        },
+        {
+          id: 'topic-recommender-2',
+          title: 'Analysis Pipeline',
+          description:
+            'Real-time data collection from Reddit, YouTube, and Instagram sources.',
+          imagePath: '/diagrams/tier-2/topic-recommender/analysis-pipeline.png',
+        },
+        {
+          id: 'topic-recommender-3',
+          title: 'Generation Engine',
+          description:
+            'LLM orchestration with platform-specific prompt conditioning.',
+          imagePath: '/diagrams/tier-2/topic-recommender/topic-generator-pipeline.png',
+        },
+        {
+          id: 'topic-recommender-4',
+          title: 'Hook Delivery',
+          description:
+            'User interface flow for hook search, selection, and copy functionality.',
+          imagePath: '/diagrams/tier-2/topic-recommender/hook-pipeline.png',
+        },
                 {
-                  id: 'he-data-3',
-                  number: 9,
-                  title: 'Failure Handling',
-                  purpose: 'Maintaining reasoning state',
-                  keyPoints: [
-                    'LLM API fallback chain (primary to backup)',
-                    'Timeout handling with partial results',
-                    'Content safety filter bypass alerts',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/failure-handling.png'],
-                },
-                {
-                  id: 'he-data-4',
-                  number: 10,
-                  title: 'Ranking & Selection',
-                  purpose: 'Maintaining reasoning state',
-                  keyPoints: [
-                    'Engagement prediction model scoring',
-                    'Diversity enforcement across results',
-                    'User preference weighting',
-                  ],
-                  imagePaths: ['/diagrams/research/tier-1/explorer/ranking&selection.png'],
-                },
-              ],
-            }
-          ],
+          id: 'topic-recommender-5',
+          title: 'Data Flow',
+          description:
+            'User interface flow for hook search, selection, and copy functionality.',
+          imagePath: '/diagrams/tier-2/topic-recommender/data-pipeline.png',
+        },
+      ],
+    },
+    {
+      id: 7,
+      name: 'Hook Explorer',
+      shortName: 'Explorer',
+      tier: 'Tier-1',
+      description:
+        'A multi-niche intelligence system that discovers, ranks, and generates high-performing hooks, captions, and titles using real audience language from social platforms.',
+      status: 'Production',
+      diagrams: [
+        {
+          id: 'explorer-1',
+          title: 'Enterprise Architecture',
+          description:
+            'A single-LLM platform trained on scraped Reddit, YouTube, and Instagram conversations to deliver niche-specific hooks and captions with contextual matching, filtering, and editing workflows.',
+          imagePath: '/diagrams/tier-1/explorer/hook-discovery.png',
+        },
+        {
+          id: 'explorer-2',
+          title: 'Analysis Pipeline',
+          description:
+            'Real-time content analysis with multi-dimensional quality scoring.',
+          imagePath: '/diagrams/tier-1/explorer/data-ingestion.png',
+        },
+        {
+          id: 'explorer-3',
+          title: 'Optimization Engine',
+          description:
+            'Automated recommendations for content improvement and performance.',
+          imagePath: '/diagrams/tier-1/explorer/ranking-selection.png',
+        },
+      ],
+    },
+    {
+      id: 8,
+      name: 'Booking Automation System',
+      shortName: 'BAS',
+      tier: 'Tier-1',
+      description:
+        'A modular, automation-ready booking platform designed for scalable scheduling, payments, and operational workflows.',
+      status: 'Production',
+      diagrams: [
+        {
+          id: 'bas-1',
+          title: 'Platform Overview',
+          description:
+            'Complete booking automation workflow from planning to analytics.',
+          imagePath: '/diagrams/tier-1/bas/platform-overview.png',
+        },
+        {
+          id: 'bas-2',
+          title: 'Main Pipeline',
+          description:
+            'Booking and scheduling with platform-specific optimization.',
+          imagePath: '/diagrams/tier-1/bas/booking-pipeline.png',
+        },
+        {
+          id: 'bas-3',
+          title: 'Collection Engine',
+          description:
+            'Intelligent scheduling with optimal timing and audience targeting.',
+          imagePath: '/diagrams/tier-1/bas/guest-collectiion-pipeline.png',
+        },
+        {
+          id: 'bas-4',
+          title: 'Subscription Pipeline',
+          description:
+            'Real-time performance tracking with actionable insights.',
+          imagePath: '/diagrams/tier-1/bas/subscription-pipeline.png',
         },
       ],
     },
   ];
-///////////////////////////////////
-// End of Tier Definitions
-////////////////////////////////////
-  const currentTier = tiers.find((t) => t.id === selectedTier);
-  const currentProjectData =
-    selectedProject && currentTier
-      ? currentTier.projects.find((p) => p.id === selectedProject)
-      : null;
 
-  const allDiagrams = currentProjectData
-    ? currentProjectData.diagramSections.flatMap((section) => section.diagrams)
+  // Filter projects by tier
+  const getProjectsByTier = (tierId: string) => {
+    const tierMap: { [key: string]: 'Tier-1' | 'Tier-2' | 'Tier-3' } = {
+      'tier-1': 'Tier-1',
+      'tier-2': 'Tier-2',
+      'tier-3': 'Tier-3',
+    };
+    return allProjects.filter((p) => p.tier === tierMap[tierId]);
+  };
+
+  const selectedProjects = selectedTier
+    ? getProjectsByTier(selectedTier)
     : [];
-  const currentDiagram = activeDiagram
-    ? allDiagrams.find((d) => d.id === activeDiagram)
-    : null;
+
+  const selectedTierInfo = tierCategories.find(
+    (t) => t.id === selectedTier
+  );
 
   return (
     <section className="px-6 py-20 md:py-28">
@@ -1060,53 +419,58 @@ export default function ModelTaxonomy() {
             {/* Tier Selection View */}
             <div className="mb-12">
               <h2 className="text-3xl font-bold text-[#0F172A] mb-4">
-                Model Taxonomy
+                What We Build
               </h2>
-              <p className="text-lg text-[#475569] mb-8 max-w-3xl leading-relaxed">
-                We think about models in clear categories. Select a tier to explore projects and their architectural diagrams.
+              <p className="text-lg text-[#475569] mb-8 max-w-3xl">
+                Our portfolio spans three tiers of AI system complexity. Choose
+                any tier to explore our functional diagrams and working systems.
               </p>
             </div>
 
             {/* Tier Cards */}
-            <div className="space-y-4 mb-12">
-              {[...tiers].sort((a, b) => a.id.localeCompare(b.id)).map((tier) => (
-                <button
-                  key={tier.id}
-                  onClick={() => {
-                    setSelectedTier(tier.id);
-                    setSelectedProject(null);
-                    setActiveDiagram(null);
-                  }}
-                  className="w-full p-8 border-2 border-[#E5E7EB] rounded-lg hover:border-[#334155] hover:shadow-lg transition-all text-left group"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-xl font-bold text-[#0F172A] group-hover:text-[#334155] transition-colors">
-                      {tier.name}
-                    </h3>
-                    <span className="text-lg text-[#334155] group-hover:translate-x-1 transition-transform">
-                      →
-                    </span>
-                  </div>
-                  <p className="text-[#475569] leading-relaxed">
-                    {tier.philosophy}
-                  </p>
-                  <div className="mt-4 pt-4 border-t border-[#E5E7EB]">
-                    <span className="text-xs font-medium text-[#9CA3AF]">
-                      {tier.projects.length} Project{tier.projects.length !== 1 ? 's' : ''}
-                    </span>
-                  </div>
-                </button>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {tierCategories.map((tier) => {
+                const projectsInTier = getProjectsByTier(tier.id);
+                return (
+                  <button
+                    key={tier.id}
+                    onClick={() => setSelectedTier(tier.id)}
+                    className="p-8 border-2 border-[#E5E7EB] rounded-lg hover:border-[#334155] transition-all text-left group hover:shadow-lg"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <h3 className="text-xl font-bold text-[#0F172A] group-hover:text-[#334155] transition-colors">
+                        {tier.label}
+                      </h3>
+                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${tier.badge}`}>
+                        {tier.subtitle}
+                      </span>
+                    </div>
+
+                    <p className="text-sm text-[#475569] mb-6 leading-relaxed">
+                      {tier.description}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB]">
+                      <span className="text-xs font-medium text-[#334155]">
+                        {projectsInTier.length} Projects
+                      </span>
+                      <span className="text-lg text-[#334155] group-hover:translate-x-1 transition-transform">
+                        →
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </>
-        ) : !selectedProject ? (
+        ) : (
           <>
-            {/* Tier View - Projects List */}
-            <div className="mb-8">
+            {/* Portfolio View */}
+            <div className="mb-12">
               <button
                 onClick={() => {
                   setSelectedTier(null);
-                  setSelectedProject(null);
+                  setExpandedProject(null);
                   setActiveDiagram(null);
                 }}
                 className="inline-flex items-center gap-2 text-[#334155] hover:text-[#0F172A] mb-6 transition-colors"
@@ -1116,256 +480,174 @@ export default function ModelTaxonomy() {
               </button>
 
               <h2 className="text-3xl font-bold text-[#0F172A] mb-2">
-                {currentTier?.name}
+                {selectedTierInfo?.label}
               </h2>
               <p className="text-lg text-[#475569]">
-                {currentTier?.philosophy}
+                Functional Diagrams — {selectedTierInfo?.label}
               </p>
             </div>
 
-            {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {currentTier?.projects.map((project) => (
-                <button
+            {/* Projects List */}
+            <div className="space-y-4">
+              {selectedProjects.map((project) => (
+                <div
                   key={project.id}
-                  onClick={() => {
-                    setSelectedProject(project.id);
-                    setActiveDiagram(null);
-                  }}
-                  className="p-6 border-2 border-[#E5E7EB] rounded-lg hover:border-[#334155] hover:shadow-lg transition-all text-left group"
+                  className="border border-[#E5E7EB] rounded-lg overflow-hidden"
                 >
-                  <h3 className="text-lg font-bold text-[#0F172A] mb-2 group-hover:text-[#334155] transition-colors">
-                    {project.name}
-                  </h3>
-                  <p className="text-sm text-[#475569] mb-4">
-                    {project.intelligence}
-                  </p>
-                  <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB]">
-                    <span className="text-xs text-[#9CA3AF]">
-                      {project.diagramSections.reduce(
-                        (sum, sec) => sum + sec.diagrams.length,
-                        0
-                      )}{' '}
-                      Diagrams
-                    </span>
-                    <span className="text-lg text-[#334155] group-hover:translate-x-1 transition-transform">
-                      →
-                    </span>
-                  </div>
-                </button>
+                  {/* Project Header */}
+                  <button
+                    onClick={() =>
+                      setExpandedProject(
+                        expandedProject === project.id ? null : project.id
+                      )
+                    }
+                    className="w-full p-6 bg-white hover:bg-[#F9FAFB] transition-colors text-left"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-[#0F172A] mb-2">
+                          {project.name}
+                        </h3>
+                        <p className="text-sm text-[#475569]">
+                          {project.description}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-4 flex-shrink-0 ml-6">
+                        <span className="text-xs font-medium text-[#334155] px-3 py-1 bg-[#F9FAFB] rounded-full">
+                          {project.status}
+                        </span>
+                        <span
+                          className={`text-2xl transition-transform ${
+                            expandedProject === project.id
+                              ? 'rotate-90'
+                              : ''
+                          }`}
+                        >
+                          →
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Project Details - Diagram Navigator */}
+                  {expandedProject === project.id && (
+                    <div className="border-t border-[#E5E7EB] bg-[#F9FAFB] p-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Left: Diagram Navigator */}
+                        <div className="lg:col-span-1">
+                          <h4 className="text-sm font-semibold text-[#0F172A] mb-4">
+                            Diagrams
+                          </h4>
+                          <div className="space-y-2">
+                            {project.diagrams.map((diagram) => (
+                              <div key={diagram.id}>
+                                <button
+                                  onClick={() => setActiveDiagram(activeDiagram === diagram.id ? null : diagram.id)}
+                                  className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-colors ${
+                                    activeDiagram === diagram.id
+                                      ? 'bg-[#0F172A] text-white'
+                                      : 'bg-white text-[#475569] hover:bg-[#E5E7EB]'
+                                  }`}
+                                >
+                                  <span className="font-medium">
+                                    ● {diagram.title}
+                                  </span>
+                                </button>
+                                
+                                {/* Mobile inline diagram viewer - only shows on small screens */}
+                                {activeDiagram === diagram.id && (
+                                  <div className="lg:hidden mt-3 mb-4 animate-in slide-in-from-top-2 duration-200">
+                                    <div className="bg-white rounded-lg border border-[#E5E7EB] overflow-hidden">
+                                      {/* Diagram Image */}
+                                      <div className="relative w-full h-[250px] bg-[#F3F4F6]">
+                                        <Image
+                                          src={diagram.imagePath}
+                                          alt={diagram.title}
+                                          fill
+                                          style={{ objectFit: 'contain' }}
+                                          className="p-2"
+                                          sizes="(max-width: 1024px) 100vw, 800px"
+                                        />
+                                      </div>
+                                      
+                                      {/* Description */}
+                                      <div className="p-4 border-t border-[#E5E7EB]">
+                                        <h5 className="font-semibold text-[#0F172A] mb-2 text-sm">
+                                          {diagram.title}
+                                        </h5>
+                                        <p className="text-xs text-[#475569] leading-relaxed">
+                                          {diagram.description}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Center: Diagram Canvas - Desktop only */}
+                        <div className="hidden lg:block lg:col-span-2">
+                          {activeDiagram ? (
+                            (() => {
+                              const diagram = project.diagrams.find(
+                                (d) => d.id === activeDiagram
+                              );
+                              return diagram ? (
+                                <div>
+                                  {/* Diagram Container */}
+                                  <div className="bg-white rounded-lg border border-[#E5E7EB] overflow-hidden mb-4">
+                                    <div className="relative w-full h-[400px] bg-[#F3F4F6]">
+                                      <Image
+                                        src={diagram.imagePath}
+                                        alt={diagram.title}
+                                        fill
+                                        style={{ objectFit: 'contain' }}
+                                        sizes="(max-width: 1024px) 100vw, 800px"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  {/* Micro-Explanation */}
+                                  <div className="bg-white p-4 rounded-lg border border-[#E5E7EB]">
+                                    <h5 className="font-semibold text-[#0F172A] mb-2">
+                                      {diagram.title}
+                                    </h5>
+                                    <p className="text-sm text-[#475569] leading-relaxed">
+                                      {diagram.description}
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null;
+                            })()
+                          ) : (
+                            <div className="bg-white rounded-lg border border-[#E5E7EB] p-8 text-center">
+                              <p className="text-[#9CA3AF] text-sm">
+                                Select a diagram to view
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </>
-        ) : (
-          <>
-            {/* Diagram Explorer View */}
-            <div className="mb-8">
-              <button
-                onClick={() => {
-                  setSelectedProject(null);
-                  setActiveDiagram(null);
-                }}
-                className="inline-flex items-center gap-2 text-[#334155] hover:text-[#0F172A] mb-6 transition-colors"
-              >
-                <span>←</span>
-                <span className="text-sm font-medium">Back to Projects</span>
-              </button>
+        )}
 
-              <h2 className="text-3xl font-bold text-[#0F172A] mb-2">
-                {currentProjectData?.name}
-              </h2>
-              <p className="text-lg text-[#475569]">
-                Architecture & System Diagrams — {currentProjectData?.tier}
-              </p>
-            </div>
-
-            {/* Diagram Navigator Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Left: Diagram Index */}
-              <div className="lg:col-span-1">
-                <div className="sticky top-24">
-                  <h3 className="text-sm font-bold text-[#0F172A] mb-6 uppercase tracking-wider">
-                    Diagram Sections
-                  </h3>
-
-                  <div className="space-y-6">
-                    {currentProjectData?.diagramSections.map((section, index) => (
-                      <div key={`${section.sectionTitle}-${index}`}>
-                        <h4 className="text-xs font-bold text-[#9CA3AF] mb-3 uppercase tracking-wider">
-                          {section.sectionTitle}
-                        </h4>
-
-                        <div className="space-y-2">
-                          {section.diagrams.map((diagram) => (
-                            <div key={diagram.id}>
-                              <button
-                                onClick={() => setActiveDiagram(activeDiagram === diagram.id ? null : diagram.id)}
-                                className={`w-full text-left px-4 py-3 rounded-lg transition-all ${
-                                  activeDiagram === diagram.id
-                                    ? 'bg-[#0F172A] text-white'
-                                    : 'bg-white text-[#0F172A] hover:bg-[#F9FAFB] border border-[#E5E7EB]'
-                                }`}
-                              >
-                                <div className="flex items-start gap-2">
-                                  <span className="text-xs font-bold flex-shrink-0 mt-0.5">
-                                    {diagram.number}.
-                                  </span>
-                                  <span className="text-sm font-medium leading-tight">
-                                    {diagram.title}
-                                  </span>
-                                </div>
-                              </button>
-                              
-                              {/* Mobile inline diagram viewer - only shows on small screens */}
-                              {activeDiagram === diagram.id && currentDiagram && (
-                                <div className="lg:hidden mt-3 mb-4 animate-in slide-in-from-top-2 duration-200">
-                                  <div className="bg-white rounded-lg border border-[#E5E7EB] overflow-hidden">
-                                    {/* Diagram Image */}
-                                    <div className="relative w-full bg-[#F3F4F6] p-4">
-                                      {currentDiagram.imagePaths.map((src, index) => (
-                                        <div
-                                          key={index}
-                                          className="relative w-full h-[250px] bg-white rounded-lg border mb-2 last:mb-0"
-                                        >
-                                          <Image
-                                            src={src}
-                                            alt={`${currentDiagram.title} — view ${index + 1}`}
-                                            fill
-                                            className="object-contain p-2"
-                                            priority
-                                          />
-                                        </div>
-                                      ))}
-                                    </div>
-                                    
-                                    {/* What to Notice */}
-                                    <div className="p-4 border-t border-[#E5E7EB]">
-                                      <h4 className="font-semibold text-[#0F172A] mb-2 text-sm">
-                                        What to notice
-                                      </h4>
-                                      <ul className="space-y-1.5">
-                                        {currentDiagram.keyPoints.map((point, idx) => (
-                                          <li
-                                            key={idx}
-                                            className="text-xs text-[#475569] flex gap-2"
-                                          >
-                                            <span className="text-[#334155] font-bold">–</span>
-                                            <span>{point}</span>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Right: Diagram Viewer - Desktop only */}
-              <div className="hidden lg:block lg:col-span-2">
-                {activeDiagram && currentDiagram ? (
-                  <div>
-                    {/* Diagram Header */}
-                    <div className="mb-4 flex items-center justify-between">
-                      <div>
-                        <h3 className="text-xl font-bold text-[#0F172A] mb-2">
-                          {currentDiagram.number}. {currentDiagram.title}
-                        </h3>
-                        <p className="text-sm text-[#475569]">
-                          {currentDiagram.purpose}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => setIsZoomed(!isZoomed)}
-                        className="text-sm font-medium text-[#334155] hover:text-[#0F172A] px-3 py-2 border border-[#E5E7EB] rounded-md transition-colors flex-shrink-0"
-                      >
-                        {isZoomed ? 'Exit' : 'Zoom'}
-                      </button>
-                    </div>
-
-                    {/* Diagram Canvas - ✅ UPDATED */}
-                    <div
-                      className={`bg-white rounded-lg border border-[#E5E7EB] overflow-hidden mb-6 ${
-                        isZoomed ? 'fixed inset-0 z-50 rounded-none' : ''
-                      }`}
-                    >
-                      <div
-                        className={`relative w-full ${
-                          isZoomed ? 'h-screen' : 'min-h-[500px]'
-                        } bg-[#F3F4F6] p-6 overflow-auto`}
-                      >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {currentDiagram.imagePaths.map((src, index) => (
-                            <div
-                              key={index}
-                              className="relative w-full h-[350px] bg-white rounded-lg border"
-                            >
-                              <Image
-                                src={src}
-                                alt={`${currentDiagram.title} — view ${index + 1}`}
-                                fill
-                                className="object-contain p-4"
-                                priority
-                              />
-                              <span className="absolute bottom-2 right-3 text-xs text-[#9CA3AF]">
-                                View {index + 1}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {isZoomed && (
-                        <button
-                          onClick={() => setIsZoomed(false)}
-                          className="absolute top-6 right-6 p-3 bg-white text-[#0F172A] rounded-lg shadow-lg hover:bg-[#F9FAFB]"
-                        >
-                          <span className="text-2xl">×</span>
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Key Points */}
-                    <div className="bg-white rounded-lg border border-[#E5E7EB] p-6 space-y-4">
-                      <div>
-                        <h4 className="font-semibold text-[#0F172A] mb-3">
-                          What to notice
-                        </h4>
-                        <ul className="space-y-2">
-                          {currentDiagram.keyPoints.map((point, idx) => (
-                            <li
-                              key={idx}
-                              className="text-sm text-[#475569] flex gap-2"
-                            >
-                              <span className="text-[#334155] font-bold">–</span>
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* Counter */}
-                    <div className="mt-6 text-xs text-[#9CA3AF] text-center">
-                      Diagram {currentDiagram.number} of {allDiagrams.length}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="bg-white rounded-lg border border-[#E5E7EB] p-12 text-center">
-                    <p className="text-[#9CA3AF] text-sm">
-                      Select a diagram to explore
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
+        {/* Information Note */}
+        {!selectedTier && (
+          <div className="mt-12 p-6 bg-[#F9FAFB] rounded-lg border border-[#E5E7EB]">
+            <p className="text-sm text-[#475569]">
+              <span className="font-semibold text-[#0F172A]">Note:</span> Each
+              system includes functional diagrams showing intelligence flow,
+              data handling, and decision making. Click any tier to explore
+              detailed system architectures.
+            </p>
+          </div>
         )}
       </div>
     </section>
